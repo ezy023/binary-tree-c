@@ -16,7 +16,7 @@ int binary_search(int num_to_find, Node tree_node){
     binary_search(num_to_find, *tree_node.left);
   } else if (num_to_find >= tree_node.key_value){
     binary_search(num_to_find, *tree_node.right);
-  } else if (tree_node.left == NULL && tree_node.right == NULL){
+  } else if (!tree_node.left && !tree_node.right){
     printf("ERROR, value not found");
   } else {
     printf("G DANG");
@@ -74,10 +74,11 @@ int main(void){
 
   root.key_value = 12;
   //  new_node.key_value = 10;
-  //  newer_node.key_value = 8;
+  newer_node.key_value = 8;
   //  newest_node.key_value = 14;
 
-  
+
+  root.left = &newer_node;
   //  new_node.left = &newer_node;
   //  root.left = &new_node;
   //  root.right = &newest_node;
@@ -87,9 +88,10 @@ int main(void){
   //  printf("The value of the left node's left is %d\n", root.left->left->key_value);
 
   int search_param = 8;
+  int insert_param = 8;
   //  insert_into_binary_tree(8, root);
   binary_search(search_param, root);
-  test_insert_into(8, root);
+  //test_insert_into(insert_param, root);
   printf("Inserted %d into the root node", root.left->key_value);
   //  double_check_myself(search_param, newer_node);
 
