@@ -8,51 +8,21 @@ typedef struct node
   struct node *right;
 } Node;
 
-int binary_search(int num_to_find, Node tree_node){
-  if(num_to_find == tree_node.key_value){
-    printf("Found %d in the tree", num_to_find);
-    return 0;
-  } else if (num_to_find < tree_node.key_value){
-    binary_search(num_to_find, *tree_node.left);
-  } else if (num_to_find >= tree_node.key_value){
-    binary_search(num_to_find, *tree_node.right);
-  } else if (!tree_node.left && !tree_node.right){
-    printf("ERROR, value not found");
-  } else {
-    printf("G DANG");
-  }
-  return 1;
-}
-
-void insert_into_binary_tree(int number_to_insert, Node tree_node){
-  if(number_to_insert < tree_node.key_value){
+void test_insert_into(Node node_to_add, Node tree_node){
+  if(node_to_add.key_value < tree_node.key_value){
     if(tree_node.left){
-      insert_into_binary_tree(number_to_insert, *tree_node.left);
+      test_insert_into(node_to_add, *tree_node.left);
     } else {
-      Node insert_node;
-      insert_node.key_value = number_to_insert;
-      tree_node.left = &insert_node;
+      tree_node.left = &node_to_add;
     }
-  } else if(number_to_insert >= tree_node.key_value){
+    printf("The value of the new node is %d\n", tree_node.left->key_value);
+  } else if(node_to_add.key_value >= tree_node.key_value) {
     if(tree_node.right){
-      insert_into_binary_tree(number_to_insert, *tree_node.right);
+      test_insert_into(node_to_add, *tree_node.right);
     } else {
-      Node insert_node;
-      insert_node.key_value = number_to_insert;
-      tree_node.right = &insert_node;
+      tree_node.right = &node_to_add;
     }
-  }
-  else {
-    printf("Houston, we have a problem");
-  }
-}
-
-void test_insert_into(int number_to_insert, Node tree_node){
-  if(number_to_insert < tree_node.key_value){
-    //    Node new_node;
-    //    new_node.key_value = number_to_insert;
-    //    tree_node.left = &new_node;
-    printf("Ok it is less than the key_value\n");
+    printf("The value of the new node is %d\n", tree_node.right->key_value);
   } else {
     printf("HMMM, this is weird\n");
   }
@@ -61,39 +31,51 @@ void test_insert_into(int number_to_insert, Node tree_node){
 void double_check_myself(int num_to_find, Node tree_node) {
   if(num_to_find == tree_node.key_value){
     printf("Found that thing\n");
+  } else if(num_to_find < tree_node.key_value){
+    printf("Ok so we hit the else\n");
+    double_check_myself(num_to_find, *tree_node.left);
+  } else if(num_to_find >= tree_node.key_value){
+    double_check_myself(num_to_find, *tree_node.right);
+  } else {
+    printf("We got a weird one, a between case\n");
   }
 }
 
+Node create_new_node(int value){
+  Node *gen_node = malloc(sizeof(Node));
+  gen_node->key_value = value;
+  return *gen_node;
+}
+
+void create_and_add_node(int value, Node *root_node)
+{
+  Node node_to_add = create_new_node(value);
+  test_insert_into(node_to_add, *root_node);
+}
 
 int main(void){
 
-  Node root;
-  Node new_node;
-  Node newer_node;
-  Node newest_node;
+  Node *root_node = malloc(sizeof(Node));
+  root_node->key_value = 10;
 
-  root.key_value = 12;
-  //  new_node.key_value = 10;
-  newer_node.key_value = 8;
-  //  newest_node.key_value = 14;
+  Node pointer_node = create_new_node(9);
+  printf("Node Value: %d\n", pointer_node.key_value);
 
+  int numbers[] = {12, 21, 30, 4, 3, 1, 6, 2, 0, 36, 13, 8, 26, 39, 34, 19, 39, 10, 28, 9};
+  int array_size = sizeof(numbers)/sizeof(int);
+  int i = 0;
 
-  root.left = &newer_node;
-  //  new_node.left = &newer_node;
-  //  root.left = &new_node;
-  //  root.right = &newest_node;
+  for(i; i < array_size; i++){
+    create_and_add_node(numbers[i], root_node);
+  }
 
-  //  printf("The root node value is %d\n", root.key_value);
-  //  printf("The value of the root's left node is %d\n", root.left->key_value);
-  //  printf("The value of the left node's left is %d\n", root.left->left->key_value);
+  /* if(root_node->left){ */
+  /*   printf("hmmmm\n"); */
+  /* } else { */
+  /*   printf("ok cool\n"); */
+  /* } */
 
-  int search_param = 8;
-  int insert_param = 8;
-  //  insert_into_binary_tree(8, root);
-  binary_search(search_param, root);
-  //test_insert_into(insert_param, root);
-  printf("Inserted %d into the root node", root.left->key_value);
-  //  double_check_myself(search_param, newer_node);
+  /* test_insert_into(pointer_node, *root_node); */
 
   return 0;
 
