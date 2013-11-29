@@ -15,14 +15,14 @@ void test_insert_into(Node node_to_add, Node tree_node){
     } else {
       tree_node.left = &node_to_add;
     }
-    printf("The value of the new node is %d\n", tree_node.left->key_value);
+    //    printf("The value of the new node is %d\n", tree_node.left->key_value);
   } else if(node_to_add.key_value >= tree_node.key_value) {
     if(tree_node.right){
       test_insert_into(node_to_add, *tree_node.right);
     } else {
       tree_node.right = &node_to_add;
     }
-    printf("The value of the new node is %d\n", tree_node.right->key_value);
+    //    printf("The value of the new node is %d\n", tree_node.right->key_value);
   } else {
     printf("HMMM, this is weird\n");
   }
@@ -47,10 +47,18 @@ Node create_new_node(int value){
   return *gen_node;
 }
 
-void create_and_add_node(int value, Node *root_node)
-{
+void create_and_add_node(int value, Node *root_node) {
   Node node_to_add = create_new_node(value);
   test_insert_into(node_to_add, *root_node);
+}
+
+void print_tree(Node node){
+  printf("%d -> ", node.key_value);
+  if(node.left){
+    print_tree(*node.left);
+  } else if (node.right) {
+    print_tree(*node.right);
+  }
 }
 
 int main(void){
@@ -69,6 +77,13 @@ int main(void){
     create_and_add_node(numbers[i], root_node);
   }
 
+  if(root_node->left != NULL){
+    printf("There is a left node\n");
+  }
+  printf("Root left is %d\n", root_node->left->key_value);
+  printf("Root right is %d\n", root_node->right->key_value);
+
+  //  print_tree(*root_node);
   /* if(root_node->left){ */
   /*   printf("hmmmm\n"); */
   /* } else { */
